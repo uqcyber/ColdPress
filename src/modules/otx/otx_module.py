@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020,2021 Oracle and/or its affiliates. All rights reserved.
 #
 
 from ..modules import NativeModule
@@ -17,19 +17,16 @@ you can use this as an example of how to write a external native module
 '''
 
 
-
 # class name has to be capitalized module name
 class Otx(NativeModule):
 
     speedType = "fast"
     threaded = True
 
-
     # include author info for contact and support
     __author__ = "Haoxi Tan"
-    __email__  = "haoxi.tan@gmail.com"
+    __email__ = "haoxi.tan@gmail.com"
     __description__ = "query info about malware hashes on alienware OTX - need OTXv2 python3 module, and otx_apikey in config/apikeys.json in the start path."
-
 
     def setup(self,  sample_path, start_path, output_path):
         self.setup_done = False
@@ -43,9 +40,9 @@ class Otx(NativeModule):
             apiconf = json.load(fp)
         apikey = apiconf.get('otx_apikey', None)
 
-
         if apikey == None:
-            print("OTX api key not found. Did you put it in apikeys.conf in the same directory as run.py?")
+            print(
+                "OTX api key not found. Did you put it in apikeys.conf in the same directory as run.py?")
 
         self.otx = OTXv2(apikey)
 
@@ -64,7 +61,7 @@ class Otx(NativeModule):
 
         if not self.setup_done:
             print("setup not done, cannot run.")
-            return 
+            return
 
         self.output = {}
         files = []
@@ -75,32 +72,23 @@ class Otx(NativeModule):
                 if root == self.sample_path:
                     if filename.endswith('.viv'):
                         continue
-                    filepath = os.path.join(root,filename)
-                    with open(filepath,'rb') as f:
+                    filepath = os.path.join(root, filename)
+                    with open(filepath, 'rb') as f:
                         buf = f.read()
                         hashes.add(md5(buf).hexdigest())
-        
+
         count = len(hashes)
         print(f"[OTX] querying {count} hashes")
 
         for h in hashes:
-            deets = self.otx.get_indicator_details_full(IndicatorTypes.FILE_HASH_MD5, h)
+            deets = self.otx.get_indicator_details_full(
+                IndicatorTypes.FILE_HASH_MD5, h)
             #print(f"[OTX] details for f{h}, type {type(deets)}: ", str(deets))
-            self.output[h] = deets 
+            self.output[h] = deets
 
         print("OTX done!")
 
     def get_output(self):
-        print('[OTX] get_output: ', str(self.output)[:50],'...')
+        print('[OTX] get_output: ', str(self.output)[:50], '...')
         # print(self.output)
         return self.output
-
-
-
-        
-        
-
-        
-
-    
-

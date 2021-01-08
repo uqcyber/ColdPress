@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020,2021 Oracle and/or its affiliates. All rights reserved.
 #
 
 from ..modules import NativeModule
@@ -11,17 +11,17 @@ import json
 import time
 
 # class name has to be capitalized module name
+
+
 class Threatminer(NativeModule):
 
     speedType = "slow"
     threaded = True
 
-
     # include author info for contact and support
     __author__ = "Haoxi Tan"
-    __email__  = "haoxi.tan@gmail.com"
+    __email__ = "haoxi.tan@gmail.com"
     __description__ = "query info about malware hashes on threatminer (check https://www.threatminer.org/api.php)"
-
 
     def setup(self,  sample_path, start_path, output_path):
         self.setup_done = False
@@ -54,7 +54,7 @@ class Threatminer(NativeModule):
 
         if not self.setup_done:
             print("setup not done, cannot run.")
-            return 
+            return
 
         self.output = {}
         files = []
@@ -67,32 +67,35 @@ class Threatminer(NativeModule):
                     if filename.endswith('.viv'):
                         continue
                     # filepath = os.path.join(self.sample_path,directories,filename)
-                    filepath = os.path.join(root,filename)
-                    with open(filepath,'rb') as f:
+                    filepath = os.path.join(root, filename)
+                    with open(filepath, 'rb') as f:
                         buf = f.read()
                         hashes.add(md5(buf).hexdigest())
-        
+
         count = len(hashes)
         print(f"[threatminer] querying {count} hashes")
 
-        types = {1:'metadata', 2:'http traffic', 3:'network hosts', 4:'mutant', 5:'registry keys', 6:'AV detections', 7:'linked reports'}
+        types = {1: 'metadata', 2: 'http traffic', 3: 'network hosts',
+                 4: 'mutant', 5: 'registry keys', 6: 'AV detections', 7: 'linked reports'}
 
         for h in hashes:
             for t in types:
                 url = f"https://api.threatminer.org/v2/sample.php?q={h}&rt={t}"
-                headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.130 Safari/537.36'}
+                headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.130 Safari/537.36'}
                 r = requests.get(url, headers=headers)
                 j = json.loads(r.text)
                 print('[threatminer] on %s, sleeping 3 seconds..' % h)
                 time.sleep(3)
                 # print('[threatminer] response:', str(j)[:10])
-                if j.get('status_code') == '200': #response found
+                if j.get('status_code') == '200':  # response found
                     self.output[h] = {}
                     self.output[h][types[t]] = j.get('results')
                 else:
-                    print('[threatminer] found nothing, status code:', j.get('status_code'))
-                    if t == 1: 
-                        #if there's no metadata, there's nothing at all - continue to next hash
+                    print('[threatminer] found nothing, status code:',
+                          j.get('status_code'))
+                    if t == 1:
+                        # if there's no metadata, there's nothing at all - continue to next hash
                         break
 
         print("threatminer done!")
@@ -100,13 +103,3 @@ class Threatminer(NativeModule):
     def get_output(self):
         # print('[threatminer] get_output: ', str(self.output)[:10],'...')
         return self.output
-
-
-
-        
-        
-
-        
-
-    
-

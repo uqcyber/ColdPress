@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 #
-# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# Copyright (c) 2020,2021 Oracle and/or its affiliates. All rights reserved.
 #
 
-from abc import ABC,abstractmethod 
+from abc import ABC, abstractmethod
 
 '''
 modules class templates that be loaded via the loader
@@ -23,14 +23,12 @@ class Module(ABC):
         '''
         raise NotImplementedError
 
-
     @property
     def threaded(self) -> bool:
         '''
         whether or not this module should run in a thread.
         '''
         ...
-
 
 
 class CmdModule(Module):
@@ -49,7 +47,6 @@ class CmdModule(Module):
         start_path: start path of the pipeline
         '''
         ...
-
 
     @classmethod
     def get_output(self, sample_path, start_path, output_path):
@@ -94,7 +91,6 @@ class NativeModule(Module):
         ...
 
 
-
 class OutputModule(Module):
     '''
     module that gets ran at the end of the pipeline, utilizing the JSON blob
@@ -108,7 +104,6 @@ class OutputModule(Module):
         '''
         ...
 
-
     @classmethod
     def get_output(self, data):
         '''
@@ -121,5 +116,3 @@ class OutputModule(Module):
         '''
         get the file extension (without the dot) of the output file
         '''
-
-        
