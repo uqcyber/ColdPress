@@ -17,4 +17,4 @@ RUN find . -type f -name requirements.txt | xargs cat | pip3 install -r /dev/std
 
 WORKDIR /usr/src/app
 
-CMD [ "python", "tests/test.py" ]
+CMD [ "python", "run.py" ]
