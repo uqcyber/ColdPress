@@ -31,7 +31,7 @@ WORKDIR /opt
 ARG R2_RELEASE=4.5.1
 ARG R2_DEB=radare2-debian-buster_${R2_RELEASE}_amd64.deb
 
-RUN wget -q https://github.com/radareorg/radare2/releases/download/${R2_RELEASE}/radare2-debian-buster_${R2_RELEASE}_amd64.deb && \
+RUN wget https://github.com/radareorg/radare2/releases/download/${R2_RELEASE}/radare2-debian-buster_${R2_RELEASE}_amd64.deb && \
     dpkg -i ${R2_DEB} && \
     rm ${R2_DEB}
 
@@ -39,7 +39,7 @@ RUN wget -q https://github.com/radareorg/radare2/releases/download/${R2_RELEASE}
 #install capa
 ARG CAPA_RELEASE=v1.4.1
 ARG CAPA_ZIP=capa-${CAPA_RELEASE}-linux.zip
-RUN wget -q https://github.com/fireeye/capa/releases/download/${CAPA_RELEASE}/capa-${CAPA_RELEASE}-linux.zip && \
+RUN wget https://github.com/fireeye/capa/releases/download/${CAPA_RELEASE}/capa-${CAPA_RELEASE}-linux.zip && \
     unzip ${CAPA_ZIP} && \
     mv capa /usr/bin/ && \
     rm ${CAPA_ZIP}
