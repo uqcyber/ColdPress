@@ -1,0 +1,11 @@
+bitstring
+lxml
+pefile
+requests
+python-magic
+r2pipe
+mmh3
+ssdeep
+capa
+vt-py
+scandir
