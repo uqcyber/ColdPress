@@ -37,6 +37,10 @@ import tempfile
 import shutil
 from shutil import copyfile
 
+# some third party libs
+sys.path.append(os.path.realpath('./libs'))
+from machoke import Machoke
+from pehash import get_pehash
 
 banner = r'''
             __________
@@ -85,7 +89,8 @@ MODULES_ALL = {
     'ghidra': 'use ghidra to decompile and disassemble binaries',
     'radare2': 'radare2 generate import and call graphs',
     'capa': 'capa(bilities) of malware, with MITRE ATT&CK mappings',
-            'regex': 'regular expresssions on strings',
+    'machoke':'CFG based hash (radare2 will be also enabled for this)',
+    'regex': 'regular expresssions on strings',
 }
 
 # external / extended modules loaded in will have speed type declared in its own classes
@@ -94,6 +99,7 @@ built_in_module_speeds = {
     "hashes": "fast",
     "ghidra": "slow",
     "radare2": "fast",
+    "machoke": "slow",
     "regex": "fast"
 }
 
